@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --primary-dark: #3a7bc8;
+            --secondary-color: #5cb85c;
+            --accent-color: #f5a623;
+            --danger-color: #d9534f;
+            --light-bg: #f8f9fa;
+            --dark-text: #495057;
+            --light-text: #ffffff;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+
+        .heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 32px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: var(--light-text);
+        }
+
+        .heading h1 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .heading img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 3px solid white;
+        }
+
+        form {
+            padding: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-text);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: border-color 0.3s;
+            background-color: var(--light-bg);
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        .form-group .input-with-icon {
+            position: relative;
+        }
+
+        .form-group .unit {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 14px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 24px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .risk-meter {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .heading {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="heading">
+            <h1>Diabetes Prediction System</h1>
+            <img src="https://cdn.vectorstock.com/i/preview-1x/34/41/risk-meter-icon-in-flat-style-rating-indicator-vector-40543441.jpg">
+        </div>
+        
+        <form action="{{ url_for('predict') }}" method="post">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="pregnancies">Number of Pregnancies:</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="pregnancies" name="pregnancies" required min="0" max="17" placeholder="0-17">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="age" name="age" required min="21" max="81" placeholder="21-81">
+                        <span class="unit">years</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="glucose">Glucose Level:</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="glucose" name="glucose" required min="0" max="199" placeholder="0-199">
+                        <span class="unit">mg/dL</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="bloodpressure">Blood Pressure:</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="bloodpressure" name="bloodpressure" required min="0" max="122" placeholder="0-122">
+                        <span class="unit">mm Hg</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="skinthickness">Skin Thickness:</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="skinthickness" name="skinthickness" required min="0" max="99" placeholder="0-99">
+                        <span class="unit">mm</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="insulin">Insulin Level:</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="insulin" name="insulin" required min="0" max="846" placeholder="0-846">
+                        <span class="unit">μU/ml</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="bmi">BMI:</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="bmi" name="bmi" required min="0" max="67" step="0.1" placeholder="0-67">
+                        <span class="unit">kg/m²</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dpf">Diabetes Pedigree Function:</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="dpf" name="dpf" required min="0.078" max="2.42" step="0.001" placeholder="0.078-2.42">
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit">Predict Risk</button>
+        </form>
+    </div>
+</body>
+</html>
