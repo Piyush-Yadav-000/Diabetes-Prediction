@@ -192,7 +192,7 @@ def predict():
             predictions[name] = {
                 'prediction': pred,
                 'probability': max(prob) * 100,
-                'accuracy': result['accuracy'] * 110,
+                'accuracy': result['accuracy'] * 100,
                 'cv_accuracy': result['cv_mean'] * 100,
                 'diabetes_type': diabetes_type,
                 'risk_level': risk_level,
